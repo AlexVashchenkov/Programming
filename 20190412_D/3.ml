@@ -16,21 +16,26 @@ let rec index l x =
 |a :: b -> if a = x then 0 else 1 + (index b x);;
 
 let rec sub l n1 n2 = 
-	if n2 >= (length l) || n1 < 0 then failwith"sub" else 
-	(if n1 = n2 then [] else (get_elem l n1) :: (sub l (n1+1) n2));;
+	match l with
+ [] -> failwith""
+|a :: b -> if n1 = n2 then [] else ((sub b (n1+1) n2) @ [a]);;
 
-let rec _end_ l n = 
-	if n = (length l) then [] else (get_elem l n) :: (_end_ l (n+1));;
+let rec del l x p = 
+	match l with
+ a :: b when a = x -> (p,b)
+|a :: b -> (del b x (p @ [a]))
+|[] -> failwith"";;
  
-let rec split lkp klp = 
-	print_string "klp = ";iter (fun x -> print_int x;print_string " ") klp;print_string "; ";
-	print_string "lkp = ";iter (fun x -> print_int x;print_string " ") lkp;print_string "\n";
-	if (length lkp) = 0 && (length klp) = 0 then (N ((root klp),L,L)) else
-	(N ((root klp),
-	    (split (sub lkp 0 (index lkp (root klp))) (sub klp 0 ((length klp) - 1))),
-	    (split (_end_ lkp ((index lkp (root klp)) + 1)) (sub klp 0 ((length klp - 1))))));;
+let rec build_tree klp lkp  = 
+	let l1 = (fst (del lkp (root klp) [])) in
+	let r1 = (snd (del lkp (root klp) [])) in
+	let l2 = (sub klp 1 (length l1)) in
+	let r2 = (sub klp (index klp (hd r1)) (length klp)) in
+	if (length l1) = 0 && (length r1) = 0 then L else
+	(N ((root klp),(build_tree l1 l2),(build_tree r1 r2)));;
+	
 
-let klp = [1;2;3;4;5;6];;
-let lkp = [3;2;4;1;5;6];;
+let klp = [3;7;5;2;8;9;6];;
+let lkp = [5;7;8;2;9;3;6];;
 
-split lkp klp;;
+build_tree klp lkp;;
