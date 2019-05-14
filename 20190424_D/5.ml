@@ -2,18 +2,12 @@ open String;;
 
 type tree = L | N of int * tree * tree;;
 
-let l = [16;11;9;10;5;6;8;1;2;4];;
+let tree = N (1,(N (2,(N (3,L,L)),(N (4,L,L)))),(N (5,(N (6,L,L)),(N (7,L,L)))));;
 
-let rec get_elem l n = 
-	match l with
- [] -> failwith""
-|a :: b -> if n = 0 then a else (get_elem b (n-1));;
-
-let rec make_tree l n = 
-	if n = (List.length l) then L else
-	if 2*n+1 >= (List.length l) then (N ((get_elem l n),L,L)) else
-	if 2*n+2 >= (List.length l) then (N ((get_elem l n),(N ((get_elem l (2*n+1)),L,L)),L)) else
-	(N ((get_elem l n),(make_tree l (2*n+1)),(make_tree l (2*n+2))));;
+let rec find_low tree k = 
+	match tree with
+ L -> L
+|N (n,tree1,tree2) -> if n < k then (N (n,(find_low tree1 k),(find_low tree2 k))) else L;;
 
 let rec find n x i = 
 	if x + i = n then i else (find n (x+i) (i+2));;
@@ -34,5 +28,8 @@ let rec parse a depth length =
 					(parse t1 (depth+1) length);
 					print_string ((create (depth+1) 0) ^ "\n");
 					(parse t2 (depth+1) length);;
+let rec create_tree n = 
+	if n < 0 then L else (N (n,(create_tree (n-1)),L));;
 
-parse (make_tree l 0) 0 4;;		
+
+parse (find_low tree 5) 0 4;;
