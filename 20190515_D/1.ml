@@ -49,7 +49,9 @@ let rec put_list m l level index =
  [] -> m
 |a :: b -> m.(level).(index) <- a;(put_list m b level (index+1));;
  
-let matrix = Array.init ((length str) - 1) (fun x -> if x = 0 then Array.init ((List.length (different str 0 []))+2) (fun x -> " ") else (Array.append [|(string_of_int (x-1))|] (Array.init ((List.length (different str 0 []))+1) (fun x -> " "))));;
+let matrix = Array.init ((length str) + 2) (fun x -> if x = 0 then Array.init ((List.length (different str 0 []))+2) (fun x -> " ") else (Array.append [|(string_of_int (x-1))|] (Array.init ((List.length (different str 0 []))+1) (fun x -> " "))));;
+
+let rec clear_matrix = Array.init (length str) (fun x -> Array.init ((List.length (different str 0 []))+2) (fun x -> " "));;
 
 put_list matrix ((List.rev (different str 0 [])) @ ["*"]) 0 1;;
 
@@ -65,11 +67,10 @@ Array.iter (fun x -> Array.iter (fun y -> print_string y; print_string " ") x;pr
 	let substr = (sub str 0 sost) ^ (matrix.(0).(index)) in
 	(put_sosts str sost (index+1) (put_list matrix (List.map (fun x -> (string_of_int x)) (lst_mmoves substr ((List.rev (different str 0 [])) @ ["*"]))) sost index));; 
 
-lst_mmoves "x" ["x";"y";"z";"*"];;
-lst_mmoves "xy" ["x";"y";"z";"*"];;
-lst_mmoves "xyz" ["x";"y";"z";"*"];;
-lst_mmoves "xyzx" ["x";"y";"z";"*"];;
-lst_mmoves "xyzxy" ["x";"y";"z";"*"];;
-lst_mmoves "xyzxyx" ["x";"y";"z";"*"];;
-
-(*put_sosts str 1 1 matrix;;*)	
+(*put_sosts str 1 1 matrix;;*)
+lst_mmoves "x" ((List.rev (different "xyzxyx" 0 [])) @ ["*"]);;
+lst_mmoves "xy" ((List.rev (different "xyzxyx" 0 [])) @ ["*"]);;
+lst_mmoves "xyz" ((List.rev (different "xyzxyx" 0 [])) @ ["*"]);;
+lst_mmoves "xyzx" ((List.rev (different "xyzxyx" 0 [])) @ ["*"]);;
+lst_mmoves "xyzxy" ((List.rev (different "xyzxyx" 0 [])) @ ["*"]);;
+lst_mmoves "xyzxyx" ((List.rev (different "xyzxyx" 0 [])) @ ["*"]);;
